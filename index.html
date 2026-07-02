@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Kit Checklist — Disco Peeps AU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#121218;
+    --card:#1c1c26;
+    --card-hi:#232330;
+    --line:#2c2c3a;
+    --text:#f4f2f7;
+    --muted:#8b899b;
+    --pink:#ff5fa8;
+    --pink-dim:#5c2e45;
+    --teal:#34e0c4;
+    --teal-dim:#1c4d47;
+    --amber:#ffc857;
+    --amber-dim:#5c4a22;
+    --violet:#9b7bff;
+    --violet-dim:#39305c;
+    --done:#4ade80;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:3rem;
+  }
+  .display{font-family:'Space Grotesk',sans-serif;}
+  header{
+    padding:1.5rem 1.25rem 1rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+  }
+  .titles h1{
+    font-size:20px;
+    font-weight:700;
+    margin:0 0 2px;
+    letter-spacing:-0.01em;
+  }
+  .titles p{
+    margin:0;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .ring-wrap{
+    position:relative;
+    width:56px;
+    height:56px;
+    flex-shrink:0;
+  }
+  .ring-wrap svg{transform:rotate(-90deg);}
+  .ring-bg{stroke:var(--line);}
+  .ring-fg{
+    stroke:var(--pink);
+    stroke-linecap:round;
+    transition:stroke-dashoffset 0.5s ease, stroke 0.5s ease;
+  }
+  .ring-label{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:600;
+    font-family:'Space Grotesk',sans-serif;
+  }
+  main{padding:0 1rem;}
+  .day{
+    margin-bottom:0.75rem;
+    border-radius:16px;
+    background:var(--card);
+    border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .day-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0.9rem 1rem;
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .day-head-left{display:flex;align-items:center;gap:10px;}
+  .day-date{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:15px;
+  }
+  .day-count{
+    font-size:12px;
+    color:var(--muted);
+    background:var(--card-hi);
+    padding:3px 9px;
+    border-radius:999px;
+    font-weight:500;
+  }
+  .day-count.complete{color:var(--done);}
+  .chevron{
+    color:var(--muted);
+    transition:transform 0.25s ease;
+    font-size:14px;
+  }
+  .day.open .chevron{transform:rotate(180deg);}
+  .items{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.3s ease;
+  }
+  .day.open .items{max-height:600px;}
+  .item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0.75rem 1rem;
+    border-top:1px solid var(--line);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+  .box{
+    width:22px;
+    height:22px;
+    border-radius:7px;
+    border:1.5px solid var(--muted);
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all 0.15s ease;
+  }
+  .box.checked{
+    background:var(--done);
+    border-color:var(--done);
+  }
+  .box.checked::after{
+    content:"";
+    width:11px;
+    height:6px;
+    border-left:2px solid #0e1a12;
+    border-bottom:2px solid #0e1a12;
+    transform:rotate(-45deg) translate(1px,-1px);
+  }
+  .item-text{flex:1;min-width:0;}
+  .item-staff{
+    font-size:14px;
+    font-weight:600;
+  }
+  .item-staff.tbc{color:var(--amber);}
+  .item-kit{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-top:1px;
+  }
+  .item.checked .item-staff,
+  .item.checked .item-kit{
+    color:var(--muted);
+    text-decoration:line-through;
+    text-decoration-color:var(--line);
+  }
+  .item.checked .item-staff.tbc{color:var(--muted);}
+  footer{
+    padding:1.25rem 1rem 0;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-size:13px;
+    padding:8px 16px;
+    border-radius:999px;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+  }
+  .reset-btn:active{background:var(--card-hi);}
+  .legend{
+    display:flex;
+    gap:14px;
+    padding:0 1.25rem 1rem;
+    flex-wrap:wrap;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:11.5px;
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="titles">
+    <h1 class="display">Kit checklist</h1>
+    <p>Silent disco, bubble slime, hula hoop & party kits</p>
+  </div>
+  <div class="ring-wrap">
+    <svg width="56" height="56" viewBox="0 0 56 56">
+      <circle class="ring-bg" cx="28" cy="28" r="24" fill="none" stroke-width="5"/>
+      <circle id="ringFg" class="ring-fg" cx="28" cy="28" r="24" fill="none" stroke-width="5"
+        stroke-dasharray="150.8" stroke-dashoffset="150.8"/>
+    </svg>
+    <div class="ring-label" id="ringLabel">0/16</div>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><span class="dot" style="background:var(--pink)"></span>Silent disco</div>
+  <div class="legend-item"><span class="dot" style="background:var(--teal)"></span>Bubble slime</div>
+  <div class="legend-item"><span class="dot" style="background:var(--violet)"></span>Disco party</div>
+  <div class="legend-item"><span class="dot" style="background:var(--amber)"></span>LED hula hoop</div>
+</div>
+
+<main id="days"></main>
+
+<footer>
+  <button class="reset-btn" id="resetBtn">Reset all for the week</button>
+</footer>
+
+<script>
+const KIT_COLORS = {
+  "Silent Disco Kit": "pink",
+  "Silent Disco Kit (Tour)": "pink",
+  "Bubble Slime Science Workshop Kit": "teal",
+  "Disco Party Kit": "violet",
+  "LED Hula Hoop Kit": "amber"
+};
+
+const data = [
+  { date: "06/07/26", label: "Mon 6 Jul", items: [
+    { id: "1", staff: "Janice", kit: "Bubble Slime Science Workshop Kit" },
+    { id: "2", staff: "Amanda", kit: "Silent Disco Kit" },
+    { id: "3", staff: "Elsa", kit: "Silent Disco Kit" },
+    { id: "4", staff: "Amanda", kit: "Silent Disco Kit" }
+  ]},
+  { date: "07/07/26", label: "Tue 7 Jul", items: [
+    { id: "5", staff: "Steph", kit: "Silent Disco Kit" },
+    { id: "6", staff: "Elsa", kit: "Silent Disco Kit" },
+    { id: "7", staff: "Amanda", kit: "Silent Disco Kit (Tour)" },
+    { id: "8", staff: "Claryse", kit: "Silent Disco Kit" }
+  ]},
+  { date: "08/07/26", label: "Wed 8 Jul", items: [
+    { id: "9", staff: "Elsa", kit: "Disco Party Kit" },
+    { id: "10", staff: "Amanda", kit: "Silent Disco Kit" },
+    { id: "11", staff: "Janice", kit: "Bubble Slime Science Workshop Kit" }
+  ]},
+  { date: "09/07/26", label: "Thu 9 Jul", items: [
+    { id: "12", staff: "Janice", kit: "Bubble Slime Science Workshop Kit" },
+    { id: "13", staff: "Claryse", kit: "Silent Disco Kit" },
+    { id: "14", staff: "TBC — staff not yet assigned", kit: "Silent Disco Kit", tbc: true }
+  ]},
+  { date: "10/07/26", label: "Fri 10 Jul", items: [
+    { id: "15", staff: "Claryse", kit: "Silent Disco Kit" },
+    { id: "16", staff: "Amanda", kit: "LED Hula Hoop Kit" }
+  ]}
+];
+
+const STORAGE_KEY = "kit-checklist-checked";
+let checked = {};
+const RING_CIRC = 150.8;
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) checked = JSON.parse(raw);
+  }catch(e){ checked = {}; }
+  render();
+}
+
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(checked));
+  }catch(e){}
+}
+
+function totalItems(){
+  return data.reduce((s,d)=>s+d.items.length,0);
+}
+function checkedCount(){
+  return Object.values(checked).filter(Boolean).length;
+}
+
+function updateRing(){
+  const total = totalItems();
+  const done = checkedCount();
+  const pct = total ? done/total : 0;
+  const offset = RING_CIRC * (1 - pct);
+  const ring = document.getElementById('ringFg');
+  ring.setAttribute('stroke-dashoffset', offset);
+  ring.style.stroke = pct >= 1 ? 'var(--done)' : 'var(--pink)';
+  document.getElementById('ringLabel').textContent = done + "/" + total;
+}
+
+function render(){
+  const container = document.getElementById('days');
+  container.innerHTML = '';
+  data.forEach((day, dayIdx)=>{
+    const doneInDay = day.items.filter(it=>checked[it.id]).length;
+    const complete = doneInDay === day.items.length;
+    const dayEl = document.createElement('div');
+    dayEl.className = 'day' + (dayIdx===0 ? ' open' : '');
+    dayEl.innerHTML = `
+      <div class="day-head" data-day="${dayIdx}">
+        <div class="day-head-left">
+          <span class="day-date display">${day.label}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="day-count${complete ? ' complete' : ''}">${doneInDay}/${day.items.length}</span>
+          <span class="chevron">▾</span>
+        </div>
+      </div>
+      <div class="items">
+        ${day.items.map(it=>{
+          const isChecked = !!checked[it.id];
+          const color = KIT_COLORS[it.kit] || 'pink';
+          return `<div class="item${isChecked?' checked':''}" data-id="${it.id}">
+            <span class="dot" style="background:var(--${color})"></span>
+            <div class="box${isChecked?' checked':''}"></div>
+            <div class="item-text">
+              <div class="item-staff${it.tbc?' tbc':''}">${it.staff}</div>
+              <div class="item-kit">${it.kit}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+    container.appendChild(dayEl);
+  });
+
+  document.querySelectorAll('.day-head').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      el.parentElement.classList.toggle('open');
+    });
+  });
+  document.querySelectorAll('.item').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const id = el.getAttribute('data-id');
+      checked[id] = !checked[id];
+      saveState();
+      render();
+      updateRing();
+    });
+  });
+  updateRing();
+}
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  checked = {};
+  saveState();
+  render();
+});
+
+loadState();
+</script>
+
+</body>
+</html>
