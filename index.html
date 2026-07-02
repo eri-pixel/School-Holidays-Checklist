@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Kit Checklist — Disco Peeps AU</title>
+<title>July SH Kit Checklist — Disco Peeps AU</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,13 +16,9 @@
     --text:#f4f2f7;
     --muted:#8b899b;
     --pink:#ff5fa8;
-    --pink-dim:#5c2e45;
     --teal:#34e0c4;
-    --teal-dim:#1c4d47;
     --amber:#ffc857;
-    --amber-dim:#5c4a22;
     --violet:#9b7bff;
-    --violet-dim:#39305c;
     --done:#4ade80;
   }
   *{box-sizing:border-box;}
@@ -44,7 +40,7 @@
     gap:1rem;
   }
   .titles h1{
-    font-size:20px;
+    font-size:19px;
     font-weight:700;
     margin:0 0 2px;
     letter-spacing:-0.01em;
@@ -108,7 +104,7 @@
     border-radius:999px;
     font-weight:500;
   }
-  .day-count.complete{color:var(--done);}
+  .day-count.complete{color:var(--done);background:rgba(74,222,128,0.12);}
   .chevron{
     color:var(--muted);
     transition:transform 0.25s ease;
@@ -118,14 +114,14 @@
   .items{
     max-height:0;
     overflow:hidden;
-    transition:max-height 0.3s ease;
+    transition:max-height 0.4s ease;
   }
-  .day.open .items{max-height:600px;}
+  .day.open .items{max-height:900px;}
   .item{
     display:flex;
-    align-items:center;
+    align-items:flex-start;
     gap:12px;
-    padding:0.75rem 1rem;
+    padding:0.8rem 1rem;
     border-top:1px solid var(--line);
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
@@ -135,6 +131,7 @@
     height:10px;
     border-radius:50%;
     flex-shrink:0;
+    margin-top:5px;
   }
   .box{
     width:22px;
@@ -146,6 +143,7 @@
     align-items:center;
     justify-content:center;
     transition:all 0.15s ease;
+    margin-top:1px;
   }
   .box.checked{
     background:var(--done);
@@ -160,23 +158,46 @@
     transform:rotate(-45deg) translate(1px,-1px);
   }
   .item-text{flex:1;min-width:0;}
-  .item-staff{
+  .item-top{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .item-time{
     font-size:14px;
     font-weight:600;
   }
-  .item-staff.tbc{color:var(--amber);}
-  .item-kit{
+  .item-time.tbc{color:var(--amber);}
+  .item-code{
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--muted);
+    background:var(--card-hi);
+    padding:1px 7px;
+    border-radius:999px;
+    letter-spacing:0.03em;
+  }
+  .item-staff{
+    font-size:13px;
+    color:var(--text);
+    margin-top:2px;
+    font-weight:500;
+  }
+  .item-loc{
     font-size:12.5px;
     color:var(--muted);
-    margin-top:1px;
+    margin-top:2px;
+    line-height:1.4;
   }
+  .item.checked .item-time,
   .item.checked .item-staff,
-  .item.checked .item-kit{
+  .item.checked .item-loc{
     color:var(--muted);
     text-decoration:line-through;
     text-decoration-color:var(--line);
   }
-  .item.checked .item-staff.tbc{color:var(--muted);}
+  .item.checked .item-time.tbc{color:var(--muted);}
   footer{
     padding:1.25rem 1rem 0;
     text-align:center;
@@ -205,14 +226,38 @@
     font-size:11.5px;
     color:var(--muted);
   }
+  #celebrate{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    transform:translate(-50%, 20px);
+    background:var(--done);
+    color:#0e1a12;
+    padding:12px 20px;
+    border-radius:999px;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:14px;
+    opacity:0;
+    transition:opacity 0.3s ease, transform 0.3s ease;
+    pointer-events:none;
+    max-width:88vw;
+    text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,0.35);
+    z-index:10;
+  }
+  #celebrate.show{
+    opacity:1;
+    transform:translate(-50%, 0);
+  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="titles">
-    <h1 class="display">Kit checklist</h1>
-    <p>Silent disco, bubble slime, hula hoop & party kits</p>
+    <h1 class="display">July SH kit checklist</h1>
+    <p>School holiday week — pack & tick off</p>
   </div>
   <div class="ring-wrap">
     <svg width="56" height="56" viewBox="0 0 56 56">
@@ -237,46 +282,55 @@
   <button class="reset-btn" id="resetBtn">Reset all for the week</button>
 </footer>
 
+<div id="celebrate"></div>
+
 <script>
 const KIT_COLORS = {
-  "Silent Disco Kit": "pink",
-  "Silent Disco Kit (Tour)": "pink",
-  "Bubble Slime Science Workshop Kit": "teal",
-  "Disco Party Kit": "violet",
-  "LED Hula Hoop Kit": "amber"
+  "Silent Disco": "pink",
+  "Bubble Slime Science Workshop": "teal",
+  "Disco Party": "violet",
+  "LED Hula Hoop": "amber"
 };
 
 const data = [
-  { date: "06/07/26", label: "Mon 6 Jul", items: [
-    { id: "1", staff: "Janice", kit: "Bubble Slime Science Workshop Kit" },
-    { id: "2", staff: "Amanda", kit: "Silent Disco Kit" },
-    { id: "3", staff: "Elsa", kit: "Silent Disco Kit" },
-    { id: "4", staff: "Amanda", kit: "Silent Disco Kit" }
+  { date: "06/07/26", label: "July 06", items: [
+    { id: "1", time: "10AM–11:30AM", code: "PVT", staff: "Amanda", kit: "Silent Disco", loc: "All Saints Catholic College, 53 Bigge St, Liverpool NSW" },
+    { id: "2", time: "10AM–11:30AM", code: "FI", staff: "Janice", kit: "Bubble Slime Science Workshop", loc: "Balgownie Public School – School Hall, 220 Balgownie Road, Balgownie NSW 2519" },
+    { id: "3", time: "10AM–11:30AM", code: "FDO", staff: "Elsa", kit: "Silent Disco", loc: "Eastwood Public School, Rowe Street, Eastwood NSW 2122" },
+    { id: "4", time: "1PM–2:30PM", code: "PVT", staff: "Amanda", kit: "Silent Disco", loc: "Lakelands Fun Club, Lakelands Public School, 61 Lakelands Dr, Dapto NSW 2530" }
   ]},
-  { date: "07/07/26", label: "Tue 7 Jul", items: [
-    { id: "5", staff: "Steph", kit: "Silent Disco Kit" },
-    { id: "6", staff: "Elsa", kit: "Silent Disco Kit" },
-    { id: "7", staff: "Amanda", kit: "Silent Disco Kit (Tour)" },
-    { id: "8", staff: "Claryse", kit: "Silent Disco Kit" }
+  { date: "07/07/26", label: "July 07", items: [
+    { id: "5", time: "10AM–11:30AM", code: "FI", staff: "Steph", kit: "Silent Disco", loc: "St Catherine of Siena, 58 Dalmeny Drive, Prestons NSW" },
+    { id: "6", time: "10AM–11:30AM", code: "FDO", staff: "Elsa", kit: "Silent Disco", loc: "Clovelly Public School, 1 Arden Avenue, Waverley NSW 2024" },
+    { id: "7", time: "10:30AM–12PM", code: "FDO", staff: "Amanda", kit: "Silent Disco", loc: "SCECS – Maroubra (Silent Disco Tour) — meet at Opera House Steps, Circular Quay" },
+    { id: "8", time: "11AM–12:30PM", code: "FI", staff: "Claryse", kit: "Silent Disco", loc: "Marayong South OSHC, 64 McClean Street, Blacktown NSW 2148" }
   ]},
-  { date: "08/07/26", label: "Wed 8 Jul", items: [
-    { id: "9", staff: "Elsa", kit: "Disco Party Kit" },
-    { id: "10", staff: "Amanda", kit: "Silent Disco Kit" },
-    { id: "11", staff: "Janice", kit: "Bubble Slime Science Workshop Kit" }
+  { date: "08/07/26", label: "July 08", items: [
+    { id: "9", time: "10:30AM–12PM", code: "FI", staff: "Elsa", kit: "Disco Party", loc: "Northwest Community Childcare, 10 Galah Street, Melonba NSW" },
+    { id: "10", time: "1PM–2:45PM", code: "PVT", staff: "Amanda", kit: "Silent Disco", loc: "Lachlan's Line Auditorium, Jarvis Circuit, North Ryde NSW 2113" },
+    { id: "11", time: "1PM–2:30PM", code: "FI", staff: "TBC — staff to confirm", kit: "Bubble Slime Science Workshop", loc: "St Bishoy Vacation Care, 53-59 Methven Mount Druitt, Mount Druitt NSW", tbc: true }
   ]},
-  { date: "09/07/26", label: "Thu 9 Jul", items: [
-    { id: "12", staff: "Janice", kit: "Bubble Slime Science Workshop Kit" },
-    { id: "13", staff: "Claryse", kit: "Silent Disco Kit" },
-    { id: "14", staff: "TBC — staff not yet assigned", kit: "Silent Disco Kit", tbc: true }
+  { date: "09/07/26", label: "July 09", items: [
+    { id: "12", time: "10AM–11:30AM", code: "FI", staff: "Janice", kit: "Bubble Slime Science Workshop", loc: "Greenwich Out of School Hours Inc, 72a Greenwich Rd, Greenwich NSW 2065" },
+    { id: "13", time: "10AM–11:30AM", code: "FDO", staff: "Claryse", kit: "Silent Disco", loc: "St Lukes Catholic College, Lot 1104 Northbourne Dr & Frontier Ave, Marsden Park NSW 2765" }
   ]},
-  { date: "10/07/26", label: "Fri 10 Jul", items: [
-    { id: "15", staff: "Claryse", kit: "Silent Disco Kit" },
-    { id: "16", staff: "Amanda", kit: "LED Hula Hoop Kit" }
+  { date: "10/07/26", label: "July 10", items: [
+    { id: "14", time: "10AM–11:30AM", code: "FDO", staff: "Claryse", kit: "Silent Disco", loc: "Riverstone Public School, 89 Elizabeth Street, Riverstone NSW 2765" },
+    { id: "15", time: "1:30PM–3PM", code: "PVT", staff: "Amanda", kit: "LED Hula Hoop", loc: "Dundas Community Centre, 21 Sturt Street, Telopea NSW 2117" }
   ]}
+];
+
+const CELEBRATIONS = [
+  "kits are sorted! Nice work.",
+  "all packed! You're a star.",
+  "done and dusted!",
+  "boxes ticked — go smash it!",
+  "ready to roll. Amazing job."
 ];
 
 const STORAGE_KEY = "kit-checklist-checked";
 let checked = {};
+let wasComplete = {};
 const RING_CIRC = 150.8;
 
 function loadState(){
@@ -284,6 +338,9 @@ function loadState(){
     const raw = localStorage.getItem(STORAGE_KEY);
     if(raw) checked = JSON.parse(raw);
   }catch(e){ checked = {}; }
+  data.forEach(day=>{
+    wasComplete[day.date] = day.items.every(it=>checked[it.id]);
+  });
   render();
 }
 
@@ -311,6 +368,17 @@ function updateRing(){
   document.getElementById('ringLabel').textContent = done + "/" + total;
 }
 
+function showCelebration(dayLabel){
+  const msg = CELEBRATIONS[Math.floor(Math.random()*CELEBRATIONS.length)];
+  const el = document.getElementById('celebrate');
+  el.textContent = dayLabel + " " + msg;
+  el.classList.add('show');
+  clearTimeout(window._celebrateTimer);
+  window._celebrateTimer = setTimeout(()=>{
+    el.classList.remove('show');
+  }, 2600);
+}
+
 function render(){
   const container = document.getElementById('days');
   container.innerHTML = '';
@@ -325,7 +393,7 @@ function render(){
           <span class="day-date display">${day.label}</span>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <span class="day-count${complete ? ' complete' : ''}">${doneInDay}/${day.items.length}</span>
+          <span class="day-count${complete ? ' complete' : ''}">${doneInDay}/${day.items.length}${complete ? ' ✓' : ''}</span>
           <span class="chevron">▾</span>
         </div>
       </div>
@@ -337,8 +405,12 @@ function render(){
             <span class="dot" style="background:var(--${color})"></span>
             <div class="box${isChecked?' checked':''}"></div>
             <div class="item-text">
-              <div class="item-staff${it.tbc?' tbc':''}">${it.staff}</div>
-              <div class="item-kit">${it.kit}</div>
+              <div class="item-top">
+                <span class="item-time${it.tbc?' tbc':''}">${it.time}</span>
+                <span class="item-code">${it.code}</span>
+              </div>
+              <div class="item-staff">${it.staff} — ${it.kit}</div>
+              <div class="item-loc">${it.loc}</div>
             </div>
           </div>`;
         }).join('')}
@@ -357,6 +429,14 @@ function render(){
       const id = el.getAttribute('data-id');
       checked[id] = !checked[id];
       saveState();
+
+      const day = data.find(d=>d.items.some(it=>it.id===id));
+      const nowComplete = day.items.every(it=>checked[it.id]);
+      if(nowComplete && !wasComplete[day.date]){
+        showCelebration(day.label);
+      }
+      wasComplete[day.date] = nowComplete;
+
       render();
       updateRing();
     });
@@ -366,6 +446,7 @@ function render(){
 
 document.getElementById('resetBtn').addEventListener('click', ()=>{
   checked = {};
+  data.forEach(day=>{ wasComplete[day.date] = false; });
   saveState();
   render();
 });
@@ -375,4 +456,3 @@ loadState();
 
 </body>
 </html>
-
