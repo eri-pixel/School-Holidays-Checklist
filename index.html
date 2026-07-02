@@ -1,8 +1,403 @@
-{ date: "08/07/26", label: "July 08", items: [
-{ id: "9", time: "10:30AM–12PM", code: "FI", staff: "Elsa", kit: "Disco Party", loc: "Northwest Community Childcare, 10 Galah Street, Melonba NSW" },
-{ id: "10", time: "1PM–2:45PM", code: "PVT", staff: "Amanda", kit: "Silent Disco", loc: "Lachlan's Line Auditorium, Jarvis Circuit, North Ryde NSW 2113" },
-    { id: "11", time: "1PM–2:30PM", code: "FI", staff: "Janice", kit: "Bubble Slime Science Workshop", loc: "St Bishoy Vacation Care, 53-59 Methven Mount Druitt, Mount Druitt NSW", tbc: true }
-    { id: "11", time: "1PM–2:30PM", code: "FI", staff: "Janice", kit: "Bubble Slime Science Workshop", loc: "St Bishoy Vacation Care, 53-59 Methven Mount Druitt, Mount Druitt NSW"}
-]},
-{ date: "09/07/26", label: "July 09", items: [
-{ id: "12", time: "10AM–11:30AM", code: "FI", staff: "Janice", kit: "Bubble Slime Science Workshop", loc: "Greenwich Out of School Hours Inc, 72a Greenwich Rd, Greenwich NSW 2065" },
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>July SH Kit Checklist — Disco Peeps AU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff8f0;
+    --card:#ffffff;
+    --card-hi:#fff1e0;
+    --line:#f2ddea;
+    --text:#2b2130;
+    --muted:#948b9c;
+    --pink:#ff5fa8;
+    --teal:#2fd0c9;
+    --amber:#ffc23a;
+    --violet:#a35bff;
+    --done:#22b573;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:3rem;
+  }
+  .display{font-family:'Space Grotesk',sans-serif;}
+  .hero{
+    background:linear-gradient(135deg, #ffd93f 0%, #ff5fa8 55%, #a35bff 100%);
+    padding:2rem 1.25rem 1.6rem;
+    border-radius:0 0 28px 28px;
+    box-shadow:0 6px 20px rgba(163,91,255,0.18);
+  }
+  .hero h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:26px;
+    color:#fff9e0;
+    margin:0 0 4px;
+    letter-spacing:-0.01em;
+    text-shadow:2px 2px 0 rgba(43,33,48,0.35);
+  }
+  .hero p{
+    margin:0;
+    font-size:13.5px;
+    color:#fff7ff;
+    font-weight:500;
+    opacity:0.95;
+  }
+  header{
+    padding:1rem 1.25rem 0.25rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+  }
+  .titles h1{
+    font-size:19px;
+    font-weight:700;
+    margin:0 0 2px;
+    letter-spacing:-0.01em;
+  }
+  .titles p{
+    margin:0;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .ring-wrap{
+    position:relative;
+    width:56px;
+    height:56px;
+    flex-shrink:0;
+  }
+  .ring-wrap svg{transform:rotate(-90deg);}
+  .ring-bg{stroke:var(--line);}
+  .ring-fg{
+    stroke:var(--pink);
+    stroke-linecap:round;
+    transition:stroke-dashoffset 0.5s ease, stroke 0.5s ease;
+  }
+  .ring-label{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:600;
+    font-family:'Space Grotesk',sans-serif;
+  }
+  main{padding:0 1rem;}
+  .staff{
+    margin-bottom:0.75rem;
+    border-radius:16px;
+    background:var(--card);
+    border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .staff-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0.9rem 1rem;
+  }
+  .staff-name{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:16px;
+  }
+  .staff-count{
+    font-size:12px;
+    color:var(--muted);
+    background:var(--card-hi);
+    padding:3px 9px;
+    border-radius:999px;
+    font-weight:500;
+  }
+  .staff-count.complete{color:var(--done);background:rgba(74,222,128,0.12);}
+  .kit-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0.75rem 1rem;
+    border-top:1px solid var(--line);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    flex-shrink:0;
+  }
+  .box{
+    width:22px;
+    height:22px;
+    border-radius:7px;
+    border:1.5px solid var(--muted);
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all 0.15s ease;
+  }
+  .box.checked{
+    background:var(--done);
+    border-color:var(--done);
+  }
+  .box.checked::after{
+    content:"";
+    width:11px;
+    height:6px;
+    border-left:2px solid #ffffff;
+    border-bottom:2px solid #ffffff;
+    transform:rotate(-45deg) translate(1px,-1px);
+  }
+  .kit-name{
+    font-size:14.5px;
+    font-weight:500;
+    flex:1;
+  }
+  .kit-row.checked .kit-name{
+    color:var(--muted);
+    text-decoration:line-through;
+    text-decoration-color:var(--line);
+  }
+  footer{
+    padding:1.25rem 1rem 0;
+    text-align:center;
+  }
+  .reset-btn{
+    background:none;
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-size:13px;
+    padding:8px 16px;
+    border-radius:999px;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+  }
+  .reset-btn:active{background:var(--card-hi);}
+  .legend{
+    display:flex;
+    gap:14px;
+    padding:0 1.25rem 1rem;
+    flex-wrap:wrap;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:11.5px;
+    color:var(--muted);
+  }
+  #celebrate{
+    position:fixed;
+    left:50%;
+    bottom:24px;
+    transform:translate(-50%, 20px);
+    background:var(--done);
+    color:#ffffff;
+    padding:12px 20px;
+    border-radius:999px;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:14px;
+    opacity:0;
+    transition:opacity 0.3s ease, transform 0.3s ease;
+    pointer-events:none;
+    max-width:88vw;
+    text-align:center;
+    box-shadow:0 8px 24px rgba(0,0,0,0.35);
+    z-index:10;
+  }
+  #celebrate.show{
+    opacity:1;
+    transform:translate(-50%, 0);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Disco Kids — July School Holidays</h1>
+  <p>Week 1 · July 06–10</p>
+</div>
+
+<header>
+  <div class="titles">
+    <h1 class="display">Kit Checklist</h1>
+    <p>Tap a kit once it's in the bag</p>
+  </div>
+  <div class="ring-wrap">
+    <svg width="56" height="56" viewBox="0 0 56 56">
+      <circle class="ring-bg" cx="28" cy="28" r="24" fill="none" stroke-width="5"/>
+      <circle id="ringFg" class="ring-fg" cx="28" cy="28" r="24" fill="none" stroke-width="5"
+        stroke-dasharray="150.8" stroke-dashoffset="150.8"/>
+    </svg>
+    <div class="ring-label" id="ringLabel">0/0</div>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><span class="dot" style="background:var(--pink)"></span>Silent disco</div>
+  <div class="legend-item"><span class="dot" style="background:var(--teal)"></span>Bubble slime</div>
+  <div class="legend-item"><span class="dot" style="background:var(--violet)"></span>Disco party</div>
+  <div class="legend-item"><span class="dot" style="background:var(--amber)"></span>LED hula hoop</div>
+</div>
+
+<main id="staffList"></main>
+
+<footer>
+  <button class="reset-btn" id="resetBtn">Reset all for the week</button>
+</footer>
+
+<div id="celebrate"></div>
+
+<script>
+const KIT_COLORS = {
+  "Silent Disco": "pink",
+  "Bubble Slime": "teal",
+  "Disco Party": "violet",
+  "LED Hula Hoop": "amber"
+};
+
+const data = [
+  { staff: "Janice", kits: ["Bubble Slime"] },
+  { staff: "Elsa", kits: ["Silent Disco", "Disco Party"] },
+  { staff: "Amanda", kits: ["Silent Disco", "LED Hula Hoop"] },
+  { staff: "Steph", kits: ["Silent Disco"] },
+  { staff: "Claryse", kits: ["Silent Disco"] }
+];
+
+const CELEBRATIONS = [
+  "all set for the week!",
+  "kits packed. Nice work!",
+  "ready to roll!",
+  "done and dusted!",
+  "sorted — go smash it!"
+];
+
+const STORAGE_KEY = "kit-checklist-by-staff";
+let checked = {};
+let wasComplete = {};
+const RING_CIRC = 150.8;
+
+function makeId(staffIdx, kitIdx){
+  return staffIdx + "-" + kitIdx;
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) checked = JSON.parse(raw);
+  }catch(e){ checked = {}; }
+  data.forEach((s, i)=>{
+    wasComplete[i] = s.kits.every((_, k)=>checked[makeId(i,k)]);
+  });
+  render();
+}
+
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(checked));
+  }catch(e){}
+}
+
+function totalItems(){
+  return data.reduce((s,d)=>s+d.kits.length,0);
+}
+function checkedCount(){
+  return Object.values(checked).filter(Boolean).length;
+}
+
+function updateRing(){
+  const total = totalItems();
+  const done = checkedCount();
+  const pct = total ? done/total : 0;
+  const offset = RING_CIRC * (1 - pct);
+  const ring = document.getElementById('ringFg');
+  ring.setAttribute('stroke-dashoffset', offset);
+  ring.style.stroke = pct >= 1 ? 'var(--done)' : 'var(--pink)';
+  document.getElementById('ringLabel').textContent = done + "/" + total;
+}
+
+function showCelebration(staffName){
+  const msg = CELEBRATIONS[Math.floor(Math.random()*CELEBRATIONS.length)];
+  const el = document.getElementById('celebrate');
+  el.textContent = staffName + "'s kits — " + msg;
+  el.classList.add('show');
+  clearTimeout(window._celebrateTimer);
+  window._celebrateTimer = setTimeout(()=>{
+    el.classList.remove('show');
+  }, 2600);
+}
+
+function render(){
+  const container = document.getElementById('staffList');
+  container.innerHTML = '';
+  data.forEach((s, staffIdx)=>{
+    const doneCount = s.kits.filter((_, k)=>checked[makeId(staffIdx,k)]).length;
+    const complete = doneCount === s.kits.length;
+    const staffEl = document.createElement('div');
+    staffEl.className = 'staff';
+    staffEl.innerHTML = `
+      <div class="staff-head">
+        <span class="staff-name display">${s.staff}</span>
+        <span class="staff-count${complete ? ' complete' : ''}">${doneCount}/${s.kits.length}${complete ? ' ✓' : ''}</span>
+      </div>
+      ${s.kits.map((kit, kitIdx)=>{
+        const id = makeId(staffIdx, kitIdx);
+        const isChecked = !!checked[id];
+        const color = KIT_COLORS[kit] || 'pink';
+        return `<div class="kit-row${isChecked?' checked':''}" data-id="${id}" data-staff="${staffIdx}">
+          <span class="dot" style="background:var(--${color})"></span>
+          <div class="box${isChecked?' checked':''}"></div>
+          <div class="kit-name">${kit}</div>
+        </div>`;
+      }).join('')}
+    `;
+    container.appendChild(staffEl);
+  });
+
+  document.querySelectorAll('.kit-row').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const id = el.getAttribute('data-id');
+      const staffIdx = el.getAttribute('data-staff');
+      checked[id] = !checked[id];
+      saveState();
+
+      const s = data[staffIdx];
+      const nowComplete = s.kits.every((_, k)=>checked[makeId(staffIdx,k)]);
+      if(nowComplete && !wasComplete[staffIdx]){
+        showCelebration(s.staff);
+      }
+      wasComplete[staffIdx] = nowComplete;
+
+      render();
+      updateRing();
+    });
+  });
+  updateRing();
+}
+
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  checked = {};
+  data.forEach((_, i)=>{ wasComplete[i] = false; });
+  saveState();
+  render();
+});
+
+loadState();
+</script>
+
+</body>
+</html>
