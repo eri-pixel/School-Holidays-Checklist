@@ -116,6 +116,16 @@
     font-weight:700;
     font-size:16px;
   }
+  .staff-note{
+    font-size:11px;
+    color:var(--muted);
+    font-style:italic;
+    margin-top:2px;
+  }
+  .staff-head-left{
+    display:flex;
+    flex-direction:column;
+  }
   .staff-count{
     font-size:12px;
     color:var(--muted);
@@ -277,11 +287,11 @@ const KIT_COLORS = {
 };
 
 const data = [
-  { staff: "Janice", kits: ["LED Hula Hoop", "Bubble Slime", "Silent Disco"] },
-  { staff: "Elsa", kits: ["Disco Party", "Time Travellers", "Silent Disco"] },
+  { staff: "Janice", kits: ["LED Hula Hoop", "Bubble Slime", "Silent Disco"], note: "Note: Bubble Slime Kit listed last week" },
+  { staff: "Elsa", kits: ["Disco Party", "Time Travellers", "Silent Disco"], note: "Note: Silent Disco and Disco Party listed last week" },
   { staff: "Amanda", kits: ["Silent Disco", "Bubble Slime", "Line Dancing"] },
-  { staff: "Steph", kits: ["Silent Disco"] },
-  { staff: "Claryse", kits: ["Disco Party", "Silent Disco"] },
+  { staff: "Steph", kits: ["Silent Disco"], note: "Note: Silent Disco listed last week" },
+  { staff: "Claryse", kits: ["Disco Party", "Silent Disco"], note: "Note: Silent Disco listed last week" },
   { staff: "Mersina", kits: ["LED Hula Hoop"] }
 ];
 
@@ -358,7 +368,10 @@ function render(){
     staffEl.className = 'staff';
     staffEl.innerHTML = `
       <div class="staff-head">
-        <span class="staff-name display">${s.staff}</span>
+        <div class="staff-head-left">
+          <span class="staff-name display">${s.staff}</span>
+          ${s.note ? `<span class="staff-note">${s.note}</span>` : ''}
+        </div>
         <span class="staff-count${complete ? ' complete' : ''}">${doneCount}/${s.kits.length}${complete ? ' ✓' : ''}</span>
       </div>
       ${s.kits.map((kit, kitIdx)=>{
