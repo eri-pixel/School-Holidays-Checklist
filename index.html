@@ -19,6 +19,8 @@
     --teal:#2fd0c9;
     --amber:#ffc23a;
     --violet:#a35bff;
+    --blue:#3aa7f5;
+    --green:#3fc97a;
     --done:#22b573;
   }
   *{box-sizing:border-box;}
@@ -229,7 +231,7 @@
 
 <div class="hero">
   <h1>Disco Kids — July School Holidays</h1>
-  <p>Week 1 · July 06–10</p>
+  <p>Week 2 · July 13–16 · No Friday booking</p>
 </div>
 
 <header>
@@ -252,6 +254,8 @@
   <div class="legend-item"><span class="dot" style="background:var(--teal)"></span>Bubble slime</div>
   <div class="legend-item"><span class="dot" style="background:var(--violet)"></span>Disco party</div>
   <div class="legend-item"><span class="dot" style="background:var(--amber)"></span>LED hula hoop</div>
+  <div class="legend-item"><span class="dot" style="background:var(--blue)"></span>Time travellers</div>
+  <div class="legend-item"><span class="dot" style="background:var(--green)"></span>Line dancing</div>
 </div>
 
 <main id="staffList"></main>
@@ -267,15 +271,18 @@ const KIT_COLORS = {
   "Silent Disco": "pink",
   "Bubble Slime": "teal",
   "Disco Party": "violet",
-  "LED Hula Hoop": "amber"
+  "LED Hula Hoop": "amber",
+  "Time Travellers": "blue",
+  "Line Dancing": "green"
 };
 
 const data = [
-  { staff: "Janice", kits: ["Bubble Slime"] },
-  { staff: "Elsa", kits: ["Silent Disco", "Disco Party"] },
-  { staff: "Amanda", kits: ["Silent Disco", "LED Hula Hoop"] },
+  { staff: "Janice", kits: ["LED Hula Hoop", "Bubble Slime", "Silent Disco"] },
+  { staff: "Elsa", kits: ["Disco Party", "Time Travellers", "Silent Disco"] },
+  { staff: "Amanda", kits: ["Silent Disco", "Bubble Slime", "Line Dancing"] },
   { staff: "Steph", kits: ["Silent Disco"] },
-  { staff: "Claryse", kits: ["Silent Disco"] }
+  { staff: "Claryse", kits: ["Disco Party", "Silent Disco"] },
+  { staff: "Mersina", kits: ["LED Hula Hoop"] }
 ];
 
 const CELEBRATIONS = [
@@ -286,7 +293,7 @@ const CELEBRATIONS = [
   "sorted — go smash it!"
 ];
 
-const STORAGE_KEY = "kit-checklist-by-staff";
+const STORAGE_KEY = "kit-checklist-july13-16";
 let checked = {};
 let wasComplete = {};
 const RING_CIRC = 150.8;
