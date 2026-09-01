@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>July SH Kit Checklist — Disco Peeps AU</title>
+<title>Sep SH Kit Checklist — Disco Peeps AU</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,6 +21,9 @@
     --violet:#a35bff;
     --blue:#3aa7f5;
     --green:#3fc97a;
+    --coral:#ff7a59;
+    --navy:#3d5afe;
+    --sand:#c9a227;
     --done:#22b573;
   }
   *{box-sizing:border-box;}
@@ -98,6 +101,22 @@
     font-family:'Space Grotesk',sans-serif;
   }
   main{padding:0 1rem;}
+  .week-label{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    margin:1.4rem 0.25rem 0.6rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .week-label:first-child{margin-top:1rem;}
+  .week-dates{
+    font-size:12px;
+    font-weight:500;
+    color:var(--muted);
+    font-family:'Inter',sans-serif;
+  }
   .staff{
     margin-bottom:0.75rem;
     border-radius:16px;
@@ -111,6 +130,10 @@
     justify-content:space-between;
     padding:0.9rem 1rem;
   }
+  .staff-head-left{
+    display:flex;
+    flex-direction:column;
+  }
   .staff-name{
     font-family:'Space Grotesk',sans-serif;
     font-weight:700;
@@ -121,10 +144,6 @@
     color:var(--muted);
     font-style:italic;
     margin-top:2px;
-  }
-  .staff-head-left{
-    display:flex;
-    flex-direction:column;
   }
   .staff-count{
     font-size:12px;
@@ -200,7 +219,7 @@
   .reset-btn:active{background:var(--card-hi);}
   .legend{
     display:flex;
-    gap:14px;
+    gap:12px;
     padding:0 1.25rem 1rem;
     flex-wrap:wrap;
   }
@@ -208,7 +227,7 @@
     display:flex;
     align-items:center;
     gap:6px;
-    font-size:11.5px;
+    font-size:11px;
     color:var(--muted);
   }
   #celebrate{
@@ -240,8 +259,8 @@
 <body>
 
 <div class="hero">
-  <h1>Disco Kids — July School Holidays</h1>
-  <p>Week 2 · July 13–16 · No Friday booking</p>
+  <h1>Disco Kids — September School Holidays</h1>
+  <p>Week 2 · 28 Sep – 02 Oct  &nbsp;|&nbsp;  Week 3 · 05 Oct – 09 Oct</p>
 </div>
 
 <header>
@@ -262,16 +281,18 @@
 <div class="legend">
   <div class="legend-item"><span class="dot" style="background:var(--pink)"></span>Silent disco</div>
   <div class="legend-item"><span class="dot" style="background:var(--teal)"></span>Bubble slime</div>
-  <div class="legend-item"><span class="dot" style="background:var(--violet)"></span>Disco party</div>
   <div class="legend-item"><span class="dot" style="background:var(--amber)"></span>LED hula hoop</div>
-  <div class="legend-item"><span class="dot" style="background:var(--blue)"></span>Time travellers</div>
   <div class="legend-item"><span class="dot" style="background:var(--green)"></span>Line dancing</div>
+  <div class="legend-item"><span class="dot" style="background:var(--blue)"></span>Time travellers</div>
+  <div class="legend-item"><span class="dot" style="background:var(--coral)"></span>Grooveletics</div>
+  <div class="legend-item"><span class="dot" style="background:var(--navy)"></span>Retro sports / Old skool</div>
+  <div class="legend-item"><span class="dot" style="background:var(--sand)"></span>Mindful art + movement</div>
 </div>
 
-<main id="staffList"></main>
+<main id="weeksList"></main>
 
 <footer>
-  <button class="reset-btn" id="resetBtn">Reset all for the week</button>
+  <button class="reset-btn" id="resetBtn">Reset all</button>
 </footer>
 
 <div id="celebrate"></div>
@@ -280,19 +301,39 @@
 const KIT_COLORS = {
   "Silent Disco": "pink",
   "Bubble Slime": "teal",
-  "Disco Party": "violet",
   "LED Hula Hoop": "amber",
+  "Line Dancing": "green",
   "Time Travellers": "blue",
-  "Line Dancing": "green"
+  "Grooveletics": "coral",
+  "Retro Sports/Old Skool Games": "navy",
+  "Silent Mindful Art + Movement": "sand"
 };
 
-const data = [
-  { staff: "Janice", kits: ["LED Hula Hoop", "Bubble Slime", "Silent Disco"], note: "Note: Bubble Slime Kit listed last week" },
-  { staff: "Elsa", kits: ["Disco Party", "Time Travellers", "Silent Disco"], note: "Note: Silent Disco and Disco Party listed last week" },
-  { staff: "Amanda", kits: ["Silent Disco", "Bubble Slime", "Line Dancing"] },
-  { staff: "Steph", kits: ["Silent Disco"], note: "Note: Silent Disco listed last week" },
-  { staff: "Claryse", kits: ["Disco Party", "Silent Disco"], note: "Note: Silent Disco listed last week" },
-  { staff: "Mersina", kits: ["LED Hula Hoop"] }
+const weeks = [
+  {
+    label: "Sep Week 2",
+    dates: "28/09 – 02/10",
+    staff: [
+      { staff: "Janice", kits: ["Bubble Slime", "Silent Disco"] },
+      { staff: "Elsa", kits: ["Silent Disco", "Grooveletics", "Line Dancing"] },
+      { staff: "Amanda", kits: ["Silent Disco", "LED Hula Hoop", "Silent Mindful Art + Movement"] },
+      { staff: "Claryse", kits: ["Silent Disco", "Bubble Slime"] },
+      { staff: "Lisa", kits: ["Silent Disco"] },
+      { staff: "Mersina", kits: ["LED Hula Hoop"] }
+    ]
+  },
+  {
+    label: "Sep Week 3",
+    dates: "05/10 – 09/10",
+    staff: [
+      { staff: "Janice", kits: ["Silent Disco", "Retro Sports/Old Skool Games"] },
+      { staff: "Elsa", kits: ["Time Travellers", "Silent Disco"] },
+      { staff: "Claryse", kits: ["Silent Disco"] },
+      { staff: "Amanda", kits: ["Bubble Slime", "Silent Disco"] },
+      { staff: "Mersina", kits: ["LED Hula Hoop"] },
+      { staff: "Lisa", kits: ["Silent Disco"] }
+    ]
+  }
 ];
 
 const CELEBRATIONS = [
@@ -303,13 +344,23 @@ const CELEBRATIONS = [
   "sorted — go smash it!"
 ];
 
-const STORAGE_KEY = "kit-checklist-july13-16";
+const STORAGE_KEY = "kit-checklist-sep-holidays";
 let checked = {};
 let wasComplete = {};
 const RING_CIRC = 150.8;
 
-function makeId(staffIdx, kitIdx){
-  return staffIdx + "-" + kitIdx;
+function makeId(weekIdx, staffIdx, kitIdx){
+  return weekIdx + "-" + staffIdx + "-" + kitIdx;
+}
+
+function allEntries(){
+  const out = [];
+  weeks.forEach((w, wi) => {
+    w.staff.forEach((s, si) => {
+      s.kits.forEach((k, ki) => out.push({ id: makeId(wi, si, ki) }));
+    });
+  });
+  return out;
 }
 
 function loadState(){
@@ -317,8 +368,10 @@ function loadState(){
     const raw = localStorage.getItem(STORAGE_KEY);
     if(raw) checked = JSON.parse(raw);
   }catch(e){ checked = {}; }
-  data.forEach((s, i)=>{
-    wasComplete[i] = s.kits.every((_, k)=>checked[makeId(i,k)]);
+  weeks.forEach((w, wi)=>{
+    w.staff.forEach((s, si)=>{
+      wasComplete[wi + "-" + si] = s.kits.every((_, k)=>checked[makeId(wi,si,k)]);
+    });
   });
   render();
 }
@@ -329,16 +382,10 @@ function saveState(){
   }catch(e){}
 }
 
-function totalItems(){
-  return data.reduce((s,d)=>s+d.kits.length,0);
-}
-function checkedCount(){
-  return Object.values(checked).filter(Boolean).length;
-}
-
 function updateRing(){
-  const total = totalItems();
-  const done = checkedCount();
+  const entries = allEntries();
+  const total = entries.length;
+  const done = entries.filter(e => checked[e.id]).length;
   const pct = total ? done/total : 0;
   const offset = RING_CIRC * (1 - pct);
   const ring = document.getElementById('ringFg');
@@ -347,10 +394,10 @@ function updateRing(){
   document.getElementById('ringLabel').textContent = done + "/" + total;
 }
 
-function showCelebration(staffName){
+function showCelebration(staffName, weekLabel){
   const msg = CELEBRATIONS[Math.floor(Math.random()*CELEBRATIONS.length)];
   const el = document.getElementById('celebrate');
-  el.textContent = staffName + "'s kits — " + msg;
+  el.textContent = staffName + "'s " + weekLabel + " kits — " + msg;
   el.classList.add('show');
   clearTimeout(window._celebrateTimer);
   window._celebrateTimer = setTimeout(()=>{
@@ -359,48 +406,57 @@ function showCelebration(staffName){
 }
 
 function render(){
-  const container = document.getElementById('staffList');
+  const container = document.getElementById('weeksList');
   container.innerHTML = '';
-  data.forEach((s, staffIdx)=>{
-    const doneCount = s.kits.filter((_, k)=>checked[makeId(staffIdx,k)]).length;
-    const complete = doneCount === s.kits.length;
-    const staffEl = document.createElement('div');
-    staffEl.className = 'staff';
-    staffEl.innerHTML = `
-      <div class="staff-head">
-        <div class="staff-head-left">
-          <span class="staff-name display">${s.staff}</span>
-          ${s.note ? `<span class="staff-note">${s.note}</span>` : ''}
+  weeks.forEach((w, wi)=>{
+    const weekHead = document.createElement('div');
+    weekHead.className = 'week-label display';
+    weekHead.innerHTML = `${w.label} <span class="week-dates">${w.dates}</span>`;
+    container.appendChild(weekHead);
+
+    w.staff.forEach((s, si)=>{
+      const doneCount = s.kits.filter((_, k)=>checked[makeId(wi,si,k)]).length;
+      const complete = doneCount === s.kits.length;
+      const staffEl = document.createElement('div');
+      staffEl.className = 'staff';
+      staffEl.innerHTML = `
+        <div class="staff-head">
+          <div class="staff-head-left">
+            <span class="staff-name display">${s.staff}</span>
+          </div>
+          <span class="staff-count${complete ? ' complete' : ''}">${doneCount}/${s.kits.length}${complete ? ' ✓' : ''}</span>
         </div>
-        <span class="staff-count${complete ? ' complete' : ''}">${doneCount}/${s.kits.length}${complete ? ' ✓' : ''}</span>
-      </div>
-      ${s.kits.map((kit, kitIdx)=>{
-        const id = makeId(staffIdx, kitIdx);
-        const isChecked = !!checked[id];
-        const color = KIT_COLORS[kit] || 'pink';
-        return `<div class="kit-row${isChecked?' checked':''}" data-id="${id}" data-staff="${staffIdx}">
-          <span class="dot" style="background:var(--${color})"></span>
-          <div class="box${isChecked?' checked':''}"></div>
-          <div class="kit-name">${kit}</div>
-        </div>`;
-      }).join('')}
-    `;
-    container.appendChild(staffEl);
+        ${s.kits.map((kit, kitIdx)=>{
+          const id = makeId(wi, si, kitIdx);
+          const isChecked = !!checked[id];
+          const color = KIT_COLORS[kit] || 'pink';
+          return `<div class="kit-row${isChecked?' checked':''}" data-id="${id}" data-week="${wi}" data-staff="${si}">
+            <span class="dot" style="background:var(--${color})"></span>
+            <div class="box${isChecked?' checked':''}"></div>
+            <div class="kit-name">${kit}</div>
+          </div>`;
+        }).join('')}
+      `;
+      container.appendChild(staffEl);
+    });
   });
 
   document.querySelectorAll('.kit-row').forEach(el=>{
     el.addEventListener('click', ()=>{
       const id = el.getAttribute('data-id');
-      const staffIdx = el.getAttribute('data-staff');
+      const wi = el.getAttribute('data-week');
+      const si = el.getAttribute('data-staff');
       checked[id] = !checked[id];
       saveState();
 
-      const s = data[staffIdx];
-      const nowComplete = s.kits.every((_, k)=>checked[makeId(staffIdx,k)]);
-      if(nowComplete && !wasComplete[staffIdx]){
-        showCelebration(s.staff);
+      const w = weeks[wi];
+      const s = w.staff[si];
+      const key = wi + "-" + si;
+      const nowComplete = s.kits.every((_, k)=>checked[makeId(wi,si,k)]);
+      if(nowComplete && !wasComplete[key]){
+        showCelebration(s.staff, w.label);
       }
-      wasComplete[staffIdx] = nowComplete;
+      wasComplete[key] = nowComplete;
 
       render();
       updateRing();
@@ -411,7 +467,9 @@ function render(){
 
 document.getElementById('resetBtn').addEventListener('click', ()=>{
   checked = {};
-  data.forEach((_, i)=>{ wasComplete[i] = false; });
+  weeks.forEach((w, wi)=>{
+    w.staff.forEach((s, si)=>{ wasComplete[wi + "-" + si] = false; });
+  });
   saveState();
   render();
 });
