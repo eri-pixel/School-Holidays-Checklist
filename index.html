@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Sep SH Kit Checklist — Disco Peeps AU</title>
+<title>September Bookings — Disco Peeps AU</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -48,16 +48,9 @@
     font-weight:700;
     font-size:26px;
     color:#fff9e0;
-    margin:0 0 4px;
+    margin:0;
     letter-spacing:-0.01em;
     text-shadow:2px 2px 0 rgba(43,33,48,0.35);
-  }
-  .hero p{
-    margin:0;
-    font-size:13.5px;
-    color:#fff7ff;
-    font-weight:500;
-    opacity:0.95;
   }
   header{
     padding:1rem 1.25rem 0.25rem;
@@ -100,6 +93,31 @@
     font-weight:600;
     font-family:'Space Grotesk',sans-serif;
   }
+
+  .tabs{
+    display:flex;
+    gap:8px;
+    padding:0.75rem 1rem 0.25rem;
+  }
+  .tab-btn{
+    flex:1;
+    background:var(--card);
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:13px;
+    padding:10px 8px;
+    border-radius:12px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .tab-btn.active{
+    background:linear-gradient(135deg, #ff5fa8, #a35bff);
+    color:#fff;
+    border-color:transparent;
+  }
+
   main{padding:0 1rem;}
   .week-label{
     font-family:'Space Grotesk',sans-serif;
@@ -138,12 +156,6 @@
     font-family:'Space Grotesk',sans-serif;
     font-weight:700;
     font-size:16px;
-  }
-  .staff-note{
-    font-size:11px;
-    color:var(--muted);
-    font-style:italic;
-    margin-top:2px;
   }
   .staff-count{
     font-size:12px;
@@ -196,6 +208,10 @@
     font-size:14.5px;
     font-weight:500;
     flex:1;
+  }
+  .kit-name .hp{
+    color:var(--muted);
+    font-weight:500;
   }
   .kit-row.checked .kit-name{
     color:var(--muted);
@@ -254,21 +270,104 @@
     opacity:1;
     transform:translate(-50%, 0);
   }
+
+  .summary-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:1rem;
+    margin:1rem 0 1.1rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .summary-card .num{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:26px;
+    color:var(--pink);
+  }
+  .summary-card .lbl{
+    font-size:12px;
+    color:var(--muted);
+    max-width:190px;
+  }
+  .booking-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:0.85rem 1rem;
+    margin-bottom:0.6rem;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .booking-card.distributed{
+    border-color:rgba(34,181,115,0.35);
+    background:rgba(34,181,115,0.05);
+  }
+  .booking-card.distributed .booking-venue,
+  .booking-card.distributed .booking-meta{
+    color:var(--muted);
+    text-decoration:line-through;
+    text-decoration-color:var(--line);
+  }
+  .booking-info{flex:1; min-width:0;}
+  .booking-date{
+    font-size:11px;
+    color:var(--muted);
+    font-weight:600;
+    margin-bottom:2px;
+  }
+  .booking-venue{
+    font-size:14.5px;
+    font-weight:700;
+    font-family:'Space Grotesk',sans-serif;
+    line-height:1.3;
+  }
+  .booking-meta{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-top:2px;
+    line-height:1.4;
+  }
+  .hp-badge{
+    flex-shrink:0;
+    text-align:center;
+    background:var(--card-hi);
+    border-radius:12px;
+    padding:6px 10px;
+    min-width:52px;
+  }
+  .hp-badge .n{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:16px;
+    color:var(--pink);
+  }
+  .hp-badge .t{
+    font-size:9.5px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+  }
+  .hp-badge.na .n{color:var(--muted); font-size:12px;}
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <h1>Disco Kids — September School Holidays</h1>
-  <p>Week 1 · 28 Sep – 02 Oct  &nbsp;|&nbsp;  Week 2 · 05 Oct – 09 Oct</p>
+  <h1>September Bookings</h1>
 </div>
 
 <header>
   <div class="titles">
-    <h1 class="display">Kit Checklist</h1>
-    <p>Tap a kit once it's in the bag</p>
+    <h1 class="display" id="pageTitle">Spring SH</h1>
+    <p id="pageSub">Tap a kit once it's in the bag</p>
   </div>
-  <div class="ring-wrap">
+  <div class="ring-wrap" id="ringWrap">
     <svg width="56" height="56" viewBox="0 0 56 56">
       <circle class="ring-bg" cx="28" cy="28" r="24" fill="none" stroke-width="5"/>
       <circle id="ringFg" class="ring-fg" cx="28" cy="28" r="24" fill="none" stroke-width="5"
@@ -278,7 +377,12 @@
   </div>
 </header>
 
-<div class="legend">
+<div class="tabs">
+  <button class="tab-btn active" id="tabKits">Spring SH</button>
+  <button class="tab-btn" id="tabBookings">Sept Bookings</button>
+</div>
+
+<div id="legendRow" class="legend">
   <div class="legend-item"><span class="dot" style="background:var(--pink)"></span>Silent disco</div>
   <div class="legend-item"><span class="dot" style="background:var(--teal)"></span>Bubble slime</div>
   <div class="legend-item"><span class="dot" style="background:var(--amber)"></span>LED hula hoop</div>
@@ -289,51 +393,130 @@
   <div class="legend-item"><span class="dot" style="background:var(--sand)"></span>Mindful art + movement</div>
 </div>
 
-<main id="weeksList"></main>
+<main id="kitsView">
+  <div id="weeksList"></div>
+  <footer>
+    <button class="reset-btn" id="resetBtn">Reset all</button>
+  </footer>
+</main>
 
-<footer>
-  <button class="reset-btn" id="resetBtn">Reset all</button>
-</footer>
+<main id="bookingsView" style="display:none;">
+  <div class="summary-card">
+    <div class="lbl">Kits distributed so far</div>
+    <div class="num" id="bookingsProgress">0/0</div>
+  </div>
+  <div id="bookingsList"></div>
+  <footer>
+    <button class="reset-btn" id="resetBookingsBtn">Reset all</button>
+  </footer>
+</main>
 
 <div id="celebrate"></div>
 
 <script>
-const KIT_COLORS = {
-  "Silent Disco": "pink",
-  "Bubble Slime": "teal",
-  "LED Hula Hoop": "amber",
-  "Line Dancing": "green",
-  "Time Travellers": "blue",
-  "Grooveletics": "coral",
-  "Retro Sports/Old Skool Games": "navy",
-  "Silent Mindful Art + Movement": "sand"
-};
+function kitColor(name){
+  if(name.includes('Bubble Slime')) return 'teal';
+  if(name.includes('LED Hula Hoop')) return 'amber';
+  if(name.includes('Line Dancing')) return 'green';
+  if(name.includes('Time Travellers')) return 'blue';
+  if(name.includes('Grooveletics')) return 'coral';
+  if(name.includes('Retro Sports')) return 'navy';
+  if(name.includes('Mindful')) return 'sand';
+  return 'pink';
+}
 
+// Spring School Holidays — every individual kit session per staff member, per week.
+// hp = headphones required for that specific session (null when the format doesn't use headphones).
 const weeks = [
   {
     label: "Sep Week 1",
     dates: "28/09 – 02/10",
     staff: [
-      { staff: "Janice", kits: ["Bubble Slime", "Silent Disco"] },
-      { staff: "Elsa", kits: ["Silent Disco", "Grooveletics", "Line Dancing"] },
-      { staff: "Amanda", kits: ["Silent Disco", "LED Hula Hoop", "Silent Mindful Art + Movement"] },
-      { staff: "Claryse", kits: ["Silent Disco", "Bubble Slime"] },
-      { staff: "Lisa", kits: ["Silent Disco"] },
-      { staff: "Mersina", kits: ["LED Hula Hoop"] }
+      { staff: "Lisa Hanssens", kits: [
+        { name: "Silent Disco", hp: 30 }
+      ]},
+      { staff: "Claryse Prested", kits: [
+        { name: "Silent Disco", hp: 45 },
+        { name: "Bubble Slime Science Workshop", hp: null },
+        { name: "Bubble Slime Science Workshop", hp: null },
+        { name: "Silent Disco (2hrs)", hp: 60 }
+      ]},
+      { staff: "Janice Stanborough", kits: [
+        { name: "Bubble Slime Science Workshop", hp: null },
+        { name: "Bubble Slime Science Workshop", hp: null },
+        { name: "Silent Disco", hp: 40 },
+        { name: "Bubble Slime Science Workshop", hp: null },
+        { name: "Silent Disco", hp: 100 }
+      ]},
+      { staff: "Elsa J Cherlin", kits: [
+        { name: "Silent Disco", hp: 30 },
+        { name: "Silent Disco", hp: 40 },
+        { name: "Silent Disco", hp: 30 },
+        { name: "Grooveletics", hp: 30 },
+        { name: "Silent Disco", hp: 45 },
+        { name: "Line Dancing", hp: 50 },
+        { name: "Line Dancing", hp: 35 }
+      ]},
+      { staff: "Mersina Khatal", kits: [
+        { name: "LED Hula Hoop", hp: null }
+      ]},
+      { staff: "Amanda McKenna", kits: [
+        { name: "Silent Disco Tours", hp: 30 },
+        { name: "LED Hula Hoop", hp: null },
+        { name: "LED Hula Hoop", hp: null },
+        { name: "Silent Mindful Art + Movement", hp: 15 }
+      ]}
     ]
   },
   {
     label: "Sep Week 2",
     dates: "05/10 – 09/10",
     staff: [
-      { staff: "Janice", kits: ["Silent Disco", "Retro Sports/Old Skool Games"] },
-      { staff: "Elsa", kits: ["Time Travellers", "Silent Disco"] },
-      { staff: "Claryse", kits: ["Silent Disco"] },
-      { staff: "Amanda", kits: ["Bubble Slime", "Silent Disco"] },
-      { staff: "Mersina", kits: ["LED Hula Hoop"] },
-      { staff: "Lisa", kits: ["Silent Disco"] }
+      { staff: "Amanda McKenna", kits: [
+        { name: "Bubble Slime Science Workshop", hp: null },
+        { name: "Silent Disco", hp: 40 }
+      ]},
+      { staff: "Janice Stanborough", kits: [
+        { name: "Silent Disco", hp: 30 },
+        { name: "Retro Sports/Old Skool Games", hp: null }
+      ]},
+      { staff: "Elsa J Cherlin", kits: [
+        { name: "Time Travellers", hp: 40 },
+        { name: "Silent Disco Tours", hp: 45 },
+        { name: "Silent Disco", hp: 30 },
+        { name: "Silent Disco", hp: 25 },
+        { name: "Silent Disco", hp: 40 },
+        { name: "Silent Disco", hp: 40 }
+      ]},
+      { staff: "Mersina Khatal", kits: [
+        { name: "LED Hula Hoop", hp: null }
+      ]},
+      { staff: "Claryse Prested", kits: [
+        { name: "Silent Disco", hp: 40 },
+        { name: "Silent Disco", hp: 45 }
+      ]},
+      { staff: "Lisa Hanssens", kits: [
+        { name: "Silent Disco (2hrs)", hp: 40 },
+        { name: "Silent Disco", hp: 30 },
+        { name: "Silent Disco", hp: 48 }
+      ]}
     ]
   }
+];
+
+// Remaining September bookings — NOT part of the school holiday program.
+// Sourced from the ConnecTeam schedule export (28/08–04/10/2026).
+const bookings = [
+  { date: "Sat 05/09", time: "11:00am – 2:00pm", venue: "Rocks Square", session: "Silent Disco", activity: "Silent Disco (Wildcard SFF)", staff: "Amanda McKenna (Host) + Giuliana Burgos-Portugal (Assistant)", hp: 50 },
+  { date: "Sat 05/09", time: "5:00pm – 8:30pm", venue: "The Rocks", session: "Sydney Fringe Party Walk", activity: "Sydney Fringe 2026 — Roving Silent Disco", staff: "Amanda McKenna (Host) + Lucy Martin (Assistant)", hp: 40 },
+  { date: "Sat 12/09", time: "5:00pm – 8:30pm", venue: "Tallowaladah Lawn, outside the MCA", session: "Sydney Fringe Party Walk", activity: "Sydney Fringe 2026 — Roving Silent Disco", staff: "Juju Glam (Host) + Giuliana Burgos-Portugal (Assistant)", hp: 40 },
+  { date: "Thu 17/09", time: "12:30pm – 4:30pm", venue: "Brisbane River Walk", session: "Corporate Silent Disco", activity: "Corporate Silent Disco Activation — STRYDE4", staff: "Hannah Indigo (Host)", hp: 50 },
+  { date: "Fri 18/09", time: "6:00pm – 9:00pm", venue: "St Mary's Leagues Club", session: "School Disco", activity: "School Disco — Aspect Western Sydney School", staff: "Elsa J Cherlin (Host)", hp: 65 },
+  { date: "Sat 19/09", time: "2:00pm – 3:30pm", venue: "Leichhardt Skate Park", session: "River Fest Party Walk", activity: "River Fest — PRCG", staff: "Lisa Hanssens (Host) + Lucy Martin (Assistant)", hp: 50 },
+  { date: "Sat 19/09", time: "5:00pm – 8:30pm", venue: "Tallowaladah Lawn, outside the MCA", session: "Sydney Fringe Party Walk", activity: "Sydney Fringe 2026 — Roving Silent Disco", staff: "Lisa Hanssens (Host) + Lucy Martin (Assistant)", hp: 40 },
+  { date: "Sat 19/09", time: "5:30pm – 7:00pm", venue: "Dover Heights", session: "Kids Party — Silent Disco", activity: "Kids Parties NSW — birthday party", staff: "Janice Stanborough (Host)", hp: 35 },
+  { date: "Mon 21/09", time: "1:00pm – 2:30pm", venue: "Albion Park High School", session: "Silent Disco", activity: "Silent Disco", staff: "Janice Stanborough (Host)", hp: 40 },
+  { date: "Sat 26/09", time: "5:00pm – 8:30pm", venue: "Tallowaladah Lawn, outside the MCA", session: "Sydney Fringe Party Walk", activity: "Sydney Fringe 2026 — Roving Silent Disco", staff: "Alana Cook (Host) + Giuliana Burgos-Portugal (Assistant)", hp: 40 }
 ];
 
 const CELEBRATIONS = [
@@ -344,8 +527,10 @@ const CELEBRATIONS = [
   "sorted — go smash it!"
 ];
 
-const STORAGE_KEY = "kit-checklist-sep-holidays";
+const STORAGE_KEY = "kit-checklist-spring-sh";
+const BOOKINGS_STORAGE_KEY = "sept-bookings-distributed";
 let checked = {};
+let bookingsChecked = {};
 let wasComplete = {};
 const RING_CIRC = 150.8;
 
@@ -368,12 +553,24 @@ function loadState(){
     const raw = localStorage.getItem(STORAGE_KEY);
     if(raw) checked = JSON.parse(raw);
   }catch(e){ checked = {}; }
+  try{
+    const rawB = localStorage.getItem(BOOKINGS_STORAGE_KEY);
+    if(rawB) bookingsChecked = JSON.parse(rawB);
+  }catch(e){ bookingsChecked = {}; }
   weeks.forEach((w, wi)=>{
     w.staff.forEach((s, si)=>{
       wasComplete[wi + "-" + si] = s.kits.every((_, k)=>checked[makeId(wi,si,k)]);
     });
   });
-  render();
+  renderKits();
+  renderBookings();
+  updateKitsRing();
+}
+
+function saveBookingsState(){
+  try{
+    localStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify(bookingsChecked));
+  }catch(e){}
 }
 
 function saveState(){
@@ -382,7 +579,7 @@ function saveState(){
   }catch(e){}
 }
 
-function updateRing(){
+function updateKitsRing(){
   const entries = allEntries();
   const total = entries.length;
   const done = entries.filter(e => checked[e.id]).length;
@@ -392,6 +589,18 @@ function updateRing(){
   ring.setAttribute('stroke-dashoffset', offset);
   ring.style.stroke = pct >= 1 ? 'var(--done)' : 'var(--pink)';
   document.getElementById('ringLabel').textContent = done + "/" + total;
+}
+
+function updateBookingsRing(){
+  const total = bookings.length;
+  const done = bookings.filter((b, i) => bookingsChecked[i]).length;
+  const pct = total ? done/total : 0;
+  const offset = RING_CIRC * (1 - pct);
+  const ring = document.getElementById('ringFg');
+  ring.setAttribute('stroke-dashoffset', offset);
+  ring.style.stroke = pct >= 1 ? 'var(--done)' : 'var(--pink)';
+  document.getElementById('ringLabel').textContent = done + "/" + total;
+  document.getElementById('bookingsProgress').textContent = done + "/" + total;
 }
 
 function showCelebration(staffName, weekLabel){
@@ -405,7 +614,7 @@ function showCelebration(staffName, weekLabel){
   }, 2600);
 }
 
-function render(){
+function renderKits(){
   const container = document.getElementById('weeksList');
   container.innerHTML = '';
   weeks.forEach((w, wi)=>{
@@ -429,11 +638,14 @@ function render(){
         ${s.kits.map((kit, kitIdx)=>{
           const id = makeId(wi, si, kitIdx);
           const isChecked = !!checked[id];
-          const color = KIT_COLORS[kit] || 'pink';
+          const color = kitColor(kit.name);
+          const label = kit.hp
+            ? `${kit.name} <span class="hp">| ${kit.hp} headphones</span>`
+            : kit.name;
           return `<div class="kit-row${isChecked?' checked':''}" data-id="${id}" data-week="${wi}" data-staff="${si}">
             <span class="dot" style="background:var(--${color})"></span>
             <div class="box${isChecked?' checked':''}"></div>
-            <div class="kit-name">${kit}</div>
+            <div class="kit-name">${label}</div>
           </div>`;
         }).join('')}
       `;
@@ -458,11 +670,48 @@ function render(){
       }
       wasComplete[key] = nowComplete;
 
-      render();
-      updateRing();
+      renderKits();
+      updateKitsRing();
     });
   });
-  updateRing();
+  updateKitsRing();
+}
+
+function renderBookings(){
+  const container = document.getElementById('bookingsList');
+  container.innerHTML = '';
+
+  bookings.forEach((b, i)=>{
+    const isDistributed = !!bookingsChecked[i];
+    const card = document.createElement('div');
+    card.className = 'booking-card' + (isDistributed ? ' distributed' : '');
+    card.setAttribute('data-idx', i);
+    const hpBadge = b.hp
+      ? `<div class="hp-badge"><div class="n">${b.hp}</div><div class="t">Headphones</div></div>`
+      : `<div class="hp-badge na"><div class="n">—</div><div class="t">No hp</div></div>`;
+    card.innerHTML = `
+      <div class="box${isDistributed?' checked':''}"></div>
+      <div class="booking-info">
+        <div class="booking-date">${b.date} · ${b.time}</div>
+        <div class="booking-venue">${b.session} | ${b.venue}</div>
+        <div class="booking-meta">${b.staff}</div>
+      </div>
+      ${hpBadge}
+    `;
+    container.appendChild(card);
+  });
+
+  document.querySelectorAll('.booking-card').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const idx = el.getAttribute('data-idx');
+      bookingsChecked[idx] = !bookingsChecked[idx];
+      saveBookingsState();
+      renderBookings();
+      updateBookingsRing();
+    });
+  });
+
+  updateBookingsRing();
 }
 
 document.getElementById('resetBtn').addEventListener('click', ()=>{
@@ -471,7 +720,45 @@ document.getElementById('resetBtn').addEventListener('click', ()=>{
     w.staff.forEach((s, si)=>{ wasComplete[wi + "-" + si] = false; });
   });
   saveState();
-  render();
+  renderKits();
+});
+
+document.getElementById('resetBookingsBtn').addEventListener('click', ()=>{
+  bookingsChecked = {};
+  saveBookingsState();
+  renderBookings();
+});
+
+const tabKits = document.getElementById('tabKits');
+const tabBookings = document.getElementById('tabBookings');
+const kitsView = document.getElementById('kitsView');
+const bookingsView = document.getElementById('bookingsView');
+const ringWrap = document.getElementById('ringWrap');
+const legendRow = document.getElementById('legendRow');
+const pageTitle = document.getElementById('pageTitle');
+const pageSub = document.getElementById('pageSub');
+
+tabKits.addEventListener('click', ()=>{
+  tabKits.classList.add('active');
+  tabBookings.classList.remove('active');
+  kitsView.style.display = '';
+  bookingsView.style.display = 'none';
+  ringWrap.style.display = '';
+  legendRow.style.display = '';
+  pageTitle.textContent = 'Spring SH';
+  pageSub.textContent = "Tap a kit once it's in the bag";
+  updateKitsRing();
+});
+tabBookings.addEventListener('click', ()=>{
+  tabBookings.classList.add('active');
+  tabKits.classList.remove('active');
+  kitsView.style.display = 'none';
+  bookingsView.style.display = '';
+  ringWrap.style.display = '';
+  legendRow.style.display = 'none';
+  pageTitle.textContent = 'September Bookings';
+  pageSub.textContent = 'Tap once kits are handed out';
+  updateBookingsRing();
 });
 
 loadState();
