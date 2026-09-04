@@ -119,6 +119,19 @@
   }
 
   main{padding:0 1rem;}
+  .group-divider{
+    height:1px;
+    background:var(--line);
+    margin:1.6rem 0.25rem 0;
+  }
+  .group-label{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:18px;
+    margin:1.2rem 0.25rem 0.4rem;
+    padding-bottom:6px;
+    border-bottom:2px solid var(--pink);
+  }
   .week-label{
     font-family:'Space Grotesk',sans-serif;
     font-weight:700;
@@ -209,14 +222,21 @@
     font-weight:500;
     flex:1;
   }
-  .kit-name .hp{
+  .kit-name .dates-list{
     color:var(--muted);
     font-weight:500;
+  }
+  .kit-name .hp{
+    color:var(--pink);
+    font-weight:700;
   }
   .kit-row.checked .kit-name{
     color:var(--muted);
     text-decoration:line-through;
     text-decoration-color:var(--line);
+  }
+  .kit-row.checked .kit-name .hp{
+    color:var(--muted);
   }
   footer{
     padding:1.25rem 1rem 0;
@@ -233,6 +253,12 @@
     cursor:pointer;
   }
   .reset-btn:active{background:var(--card-hi);}
+  .hp-note{
+    margin:0 1rem 0.5rem;
+    font-size:11.5px;
+    color:var(--muted);
+    font-style:italic;
+  }
   .legend{
     display:flex;
     gap:12px;
@@ -353,7 +379,6 @@
     text-transform:uppercase;
     letter-spacing:0.02em;
   }
-  .hp-badge.na .n{color:var(--muted); font-size:12px;}
 </style>
 </head>
 <body>
@@ -364,7 +389,7 @@
 
 <header>
   <div class="titles">
-    <h1 class="display" id="pageTitle">Spring SH</h1>
+    <h1 class="display" id="pageTitle">Sept Kits</h1>
     <p id="pageSub">Tap a kit once it's in the bag</p>
   </div>
   <div class="ring-wrap" id="ringWrap">
@@ -377,10 +402,7 @@
   </div>
 </header>
 
-<div class="tabs">
-  <button class="tab-btn active" id="tabKits">Spring SH</button>
-  <button class="tab-btn" id="tabBookings">Sept Bookings</button>
-</div>
+<div class="hp-note">HP = Headphones</div>
 
 <div id="legendRow" class="legend">
   <div class="legend-item"><span class="dot" style="background:var(--pink)"></span>Silent disco</div>
@@ -400,17 +422,6 @@
   </footer>
 </main>
 
-<main id="bookingsView" style="display:none;">
-  <div class="summary-card">
-    <div class="lbl">Kits distributed so far</div>
-    <div class="num" id="bookingsProgress">0/0</div>
-  </div>
-  <div id="bookingsList"></div>
-  <footer>
-    <button class="reset-btn" id="resetBookingsBtn">Reset all</button>
-  </footer>
-</main>
-
 <div id="celebrate"></div>
 
 <script>
@@ -425,98 +436,136 @@ function kitColor(name){
   return 'pink';
 }
 
-// Spring School Holidays — every individual kit session per staff member, per week.
-// hp = headphones required for that specific session (null when the format doesn't use headphones).
+// Sept Kits — every individual kit session per staff member, across Sep Week 1,
+// Sep Week 2, and the other September bookings that fall outside the school
+// holiday weeks (weekend Sydney Fringe walks, River Fest, School Disco, etc.)
+// hp = headphones required for that specific session (null when the format
+// doesn't use headphones).
 const weeks = [
   {
     label: "Sep Week 1",
     dates: "28/09 – 02/10",
     staff: [
       { staff: "Lisa Hanssens", kits: [
-        { name: "Silent Disco", hp: 30 }
+        { name: "Silent Disco", dates: ["28/09", "01/10"], hps: [30, 100] }
       ]},
       { staff: "Claryse Prested", kits: [
-        { name: "Silent Disco", hp: 45 },
-        { name: "Bubble Slime Science Workshop", hp: null },
-        { name: "Bubble Slime Science Workshop", hp: null },
-        { name: "Silent Disco (2hrs)", hp: 60 }
-      ]},
-      { staff: "Janice Stanborough", kits: [
-        { name: "Bubble Slime Science Workshop", hp: null },
-        { name: "Bubble Slime Science Workshop", hp: null },
-        { name: "Silent Disco", hp: 40 },
-        { name: "Bubble Slime Science Workshop", hp: null },
-        { name: "Silent Disco", hp: 100 }
+        { name: "Silent Disco", dates: ["28/09"], hps: [45] },
+        { name: "Bubble Slime Science Workshop", dates: ["29/09", "29/09"], hps: [null, null] },
+        { name: "Silent Disco (2hrs)", dates: ["01/10"], hps: [60] }
       ]},
       { staff: "Elsa J Cherlin", kits: [
-        { name: "Silent Disco", hp: 30 },
-        { name: "Silent Disco", hp: 40 },
-        { name: "Silent Disco", hp: 30 },
-        { name: "Grooveletics", hp: 30 },
-        { name: "Silent Disco", hp: 45 },
-        { name: "Line Dancing", hp: 50 },
-        { name: "Line Dancing", hp: 35 }
+        { name: "Silent Disco", dates: ["28/09", "28/09", "29/09", "30/09", "30/09"], hps: [30, 40, 30, 45, 45] },
+        { name: "Grooveletics", dates: ["29/09"], hps: [30] },
+        { name: "Line Dancing", dates: ["01/10", "01/10"], hps: [50, 35] }
+      ]},
+      { staff: "Janice Stanborough", kits: [
+        { name: "Bubble Slime Science Workshop", dates: ["28/09", "28/09", "30/09"], hps: [null, null, null] },
+        { name: "Silent Disco", dates: ["30/09"], hps: [40] }
       ]},
       { staff: "Mersina Khatal", kits: [
-        { name: "LED Hula Hoop", hp: null }
+        { name: "LED Hula Hoop", dates: ["29/09", "29/09"], hps: [null, null] }
       ]},
       { staff: "Amanda McKenna", kits: [
-        { name: "Silent Disco Tours", hp: 30 },
-        { name: "LED Hula Hoop", hp: null },
-        { name: "LED Hula Hoop", hp: null },
-        { name: "Silent Mindful Art + Movement", hp: 15 }
+        { name: "Silent Disco Tours", dates: ["30/09"], hps: [30] },
+        { name: "LED Hula Hoop", dates: ["01/10", "01/10"], hps: [null, null] },
+        { name: "Silent Mindful Art + Movement", dates: ["02/10"], hps: [15] }
+      ]},
+      { staff: "FDO (Waiting for date change)", kits: [
+        { name: "Silent Disco", dates: ["29/09"], hps: [70] }
       ]}
     ]
   },
   {
     label: "Sep Week 2",
-    dates: "05/10 – 09/10",
+    dates: "05/10 – 12/10",
     staff: [
-      { staff: "Amanda McKenna", kits: [
-        { name: "Bubble Slime Science Workshop", hp: null },
-        { name: "Silent Disco", hp: 40 }
+      { staff: "Claryse Prested", kits: [
+        { name: "Time Travellers", dates: ["06/10"], hps: [35] },
+        { name: "Silent Disco", dates: ["08/10", "09/10"], hps: [40, 45] }
       ]},
       { staff: "Janice Stanborough", kits: [
-        { name: "Silent Disco", hp: 30 },
-        { name: "Retro Sports/Old Skool Games", hp: null }
+        { name: "Silent Disco", dates: ["07/10"], hps: [30] },
+        { name: "Retro Sports/Old Skool Games", dates: ["07/10"], hps: [null] }
       ]},
       { staff: "Elsa J Cherlin", kits: [
-        { name: "Time Travellers", hp: 40 },
-        { name: "Silent Disco Tours", hp: 45 },
-        { name: "Silent Disco", hp: 30 },
-        { name: "Silent Disco", hp: 25 },
-        { name: "Silent Disco", hp: 40 },
-        { name: "Silent Disco", hp: 40 }
+        { name: "Time Travellers", dates: ["07/10"], hps: [40] },
+        { name: "Silent Disco Tours", dates: ["08/10"], hps: [45] },
+        { name: "Silent Disco", dates: ["06/10", "06/10", "09/10", "09/10", "12/10", "12/10"], hps: [30, 30, 30, 25, 40, 40] }
       ]},
       { staff: "Mersina Khatal", kits: [
-        { name: "LED Hula Hoop", hp: null }
+        { name: "LED Hula Hoop", dates: ["07/10"], hps: [null] }
       ]},
-      { staff: "Claryse Prested", kits: [
-        { name: "Silent Disco", hp: 40 },
-        { name: "Silent Disco", hp: 45 }
+      { staff: "Amanda McKenna", kits: [
+        { name: "Bubble Slime Science Workshop", dates: ["06/10"], hps: [null] },
+        { name: "Time Travellers", dates: ["07/10"], hps: [null] },
+        { name: "Silent Disco", dates: ["08/10"], hps: [40] }
       ]},
       { staff: "Lisa Hanssens", kits: [
-        { name: "Silent Disco (2hrs)", hp: 40 },
-        { name: "Silent Disco", hp: 30 },
-        { name: "Silent Disco", hp: 48 }
+        { name: "Silent Disco (2hrs)", dates: ["09/10"], hps: [40] },
+        { name: "Silent Disco", dates: ["09/10", "12/10"], hps: [30, 48] }
+      ]}
+    ]
+  },
+  {
+    label: "Sydney Fringe · Wildcard SFF · River Fest",
+    dates: "05, 12, 19, 26 Sep",
+    staff: [
+      { staff: "Amanda McKenna (Host) + Giuliana Burgos-Portugal (Assistant)", kits: [
+        { name: "Silent Disco — Wildcard SFF (Rocks Square)", dates: ["05/09"], hps: [50] }
+      ]},
+      { staff: "Amanda McKenna (Host) + Lucy Martin (Assistant)", kits: [
+        { name: "Sydney Fringe Party Walk (The Rocks)", dates: ["05/09"], hps: [40] }
+      ]},
+      { staff: "Juju Glam (Host) + Giuliana Burgos-Portugal (Assistant)", kits: [
+        { name: "Sydney Fringe Party Walk (Tallowaladah Lawn, outside the MCA)", dates: ["12/09"], hps: [40] }
+      ]},
+      { staff: "Lisa Hanssens (Host) + Lucy Martin (Assistant)", kits: [
+        { name: "River Fest Party Walk (Leichhardt Skate Park)", dates: ["19/09"], hps: [50] },
+        { name: "Sydney Fringe Party Walk (Tallowaladah Lawn, outside the MCA)", dates: ["19/09"], hps: [40] }
+      ]},
+      { staff: "Alana Cook (Host) + Giuliana Burgos-Portugal (Assistant)", kits: [
+        { name: "Sydney Fringe Party Walk (Tallowaladah Lawn, outside the MCA)", dates: ["26/09"], hps: [40] }
+      ]}
+    ]
+  },
+  {
+    label: "17 Sep — Corporate Silent Disco",
+    dates: "Brisbane River Walk",
+    staff: [
+      { staff: "Hannah Indigo (Host)", kits: [
+        { name: "Corporate Silent Disco Activation (Brisbane River Walk)", dates: ["17/09"], hps: [50] }
+      ]}
+    ]
+  },
+  {
+    label: "18 Sep — School Disco",
+    dates: "St Mary's Leagues Club",
+    staff: [
+      { staff: "Elsa J Cherlin (Host)", kits: [
+        { name: "School Disco (St Mary's Leagues Club)", dates: ["18/09"], hps: [65] }
+      ]}
+    ]
+  },
+  {
+    label: "19 & 21 Sep — Kids Party & Silent Disco",
+    dates: "Janice",
+    staff: [
+      { staff: "Janice Stanborough (Host)", kits: [
+        { name: "Kids Party — Silent Disco (Dover Heights)", dates: ["19/09"], hps: [35] },
+        { name: "Silent Disco (Albion Park High School)", dates: ["21/09"], hps: [40] }
+      ]}
+    ]
+  },
+  {
+    label: "10 Oct — Private Party",
+    dates: "Janice",
+    staff: [
+      { staff: "Janice Stanborough (Host)", kits: [
+        { name: "Private Party — LED Hula Hoop (Newtown)", dates: ["10/10"], hps: [null] }
       ]}
     ]
   }
-];
-
-// Remaining September bookings — NOT part of the school holiday program.
-// Sourced from the ConnecTeam schedule export (28/08–04/10/2026).
-const bookings = [
-  { date: "Sat 05/09", time: "11:00am – 2:00pm", venue: "Rocks Square", session: "Silent Disco", activity: "Silent Disco (Wildcard SFF)", staff: "Amanda McKenna (Host) + Giuliana Burgos-Portugal (Assistant)", hp: 50 },
-  { date: "Sat 05/09", time: "5:00pm – 8:30pm", venue: "The Rocks", session: "Sydney Fringe Party Walk", activity: "Sydney Fringe 2026 — Roving Silent Disco", staff: "Amanda McKenna (Host) + Lucy Martin (Assistant)", hp: 40 },
-  { date: "Sat 12/09", time: "5:00pm – 8:30pm", venue: "Tallowaladah Lawn, outside the MCA", session: "Sydney Fringe Party Walk", activity: "Sydney Fringe 2026 — Roving Silent Disco", staff: "Juju Glam (Host) + Giuliana Burgos-Portugal (Assistant)", hp: 40 },
-  { date: "Thu 17/09", time: "12:30pm – 4:30pm", venue: "Brisbane River Walk", session: "Corporate Silent Disco", activity: "Corporate Silent Disco Activation — STRYDE4", staff: "Hannah Indigo (Host)", hp: 50 },
-  { date: "Fri 18/09", time: "6:00pm – 9:00pm", venue: "St Mary's Leagues Club", session: "School Disco", activity: "School Disco — Aspect Western Sydney School", staff: "Elsa J Cherlin (Host)", hp: 65 },
-  { date: "Sat 19/09", time: "2:00pm – 3:30pm", venue: "Leichhardt Skate Park", session: "River Fest Party Walk", activity: "River Fest — PRCG", staff: "Lisa Hanssens (Host) + Lucy Martin (Assistant)", hp: 50 },
-  { date: "Sat 19/09", time: "5:00pm – 8:30pm", venue: "Tallowaladah Lawn, outside the MCA", session: "Sydney Fringe Party Walk", activity: "Sydney Fringe 2026 — Roving Silent Disco", staff: "Lisa Hanssens (Host) + Lucy Martin (Assistant)", hp: 40 },
-  { date: "Sat 19/09", time: "5:30pm – 7:00pm", venue: "Dover Heights", session: "Kids Party — Silent Disco", activity: "Kids Parties NSW — birthday party", staff: "Janice Stanborough (Host)", hp: 35 },
-  { date: "Mon 21/09", time: "1:00pm – 2:30pm", venue: "Albion Park High School", session: "Silent Disco", activity: "Silent Disco", staff: "Janice Stanborough (Host)", hp: 40 },
-  { date: "Sat 26/09", time: "5:00pm – 8:30pm", venue: "Tallowaladah Lawn, outside the MCA", session: "Sydney Fringe Party Walk", activity: "Sydney Fringe 2026 — Roving Silent Disco", staff: "Alana Cook (Host) + Giuliana Burgos-Portugal (Assistant)", hp: 40 }
 ];
 
 const CELEBRATIONS = [
@@ -527,10 +576,8 @@ const CELEBRATIONS = [
   "sorted — go smash it!"
 ];
 
-const STORAGE_KEY = "kit-checklist-spring-sh";
-const BOOKINGS_STORAGE_KEY = "sept-bookings-distributed";
+const STORAGE_KEY = "kit-checklist-sept-kits";
 let checked = {};
-let bookingsChecked = {};
 let wasComplete = {};
 const RING_CIRC = 150.8;
 
@@ -553,24 +600,12 @@ function loadState(){
     const raw = localStorage.getItem(STORAGE_KEY);
     if(raw) checked = JSON.parse(raw);
   }catch(e){ checked = {}; }
-  try{
-    const rawB = localStorage.getItem(BOOKINGS_STORAGE_KEY);
-    if(rawB) bookingsChecked = JSON.parse(rawB);
-  }catch(e){ bookingsChecked = {}; }
   weeks.forEach((w, wi)=>{
     w.staff.forEach((s, si)=>{
       wasComplete[wi + "-" + si] = s.kits.every((_, k)=>checked[makeId(wi,si,k)]);
     });
   });
   renderKits();
-  renderBookings();
-  updateKitsRing();
-}
-
-function saveBookingsState(){
-  try{
-    localStorage.setItem(BOOKINGS_STORAGE_KEY, JSON.stringify(bookingsChecked));
-  }catch(e){}
 }
 
 function saveState(){
@@ -591,18 +626,6 @@ function updateKitsRing(){
   document.getElementById('ringLabel').textContent = done + "/" + total;
 }
 
-function updateBookingsRing(){
-  const total = bookings.length;
-  const done = bookings.filter((b, i) => bookingsChecked[i]).length;
-  const pct = total ? done/total : 0;
-  const offset = RING_CIRC * (1 - pct);
-  const ring = document.getElementById('ringFg');
-  ring.setAttribute('stroke-dashoffset', offset);
-  ring.style.stroke = pct >= 1 ? 'var(--done)' : 'var(--pink)';
-  document.getElementById('ringLabel').textContent = done + "/" + total;
-  document.getElementById('bookingsProgress').textContent = done + "/" + total;
-}
-
 function showCelebration(staffName, weekLabel){
   const msg = CELEBRATIONS[Math.floor(Math.random()*CELEBRATIONS.length)];
   const el = document.getElementById('celebrate');
@@ -618,6 +641,21 @@ function renderKits(){
   const container = document.getElementById('weeksList');
   container.innerHTML = '';
   weeks.forEach((w, wi)=>{
+    if(wi === 0){
+      const groupHead = document.createElement('div');
+      groupHead.className = 'group-label display';
+      groupHead.textContent = 'School Holidays';
+      container.appendChild(groupHead);
+    }
+    if(wi === 2){
+      const divider = document.createElement('div');
+      divider.className = 'group-divider';
+      container.appendChild(divider);
+      const groupHead = document.createElement('div');
+      groupHead.className = 'group-label display';
+      groupHead.textContent = 'Other September Bookings';
+      container.appendChild(groupHead);
+    }
     const weekHead = document.createElement('div');
     weekHead.className = 'week-label display';
     weekHead.innerHTML = `${w.label} <span class="week-dates">${w.dates}</span>`;
@@ -639,9 +677,15 @@ function renderKits(){
           const id = makeId(wi, si, kitIdx);
           const isChecked = !!checked[id];
           const color = kitColor(kit.name);
-          const label = kit.hp
-            ? `${kit.name} <span class="hp">| ${kit.hp} headphones</span>`
-            : kit.name;
+          let label;
+          if(kit.dates){
+            const parts = kit.dates.map((d, i) => kit.hps[i] ? `${d} · <span class="hp">${kit.hps[i]}HP</span>` : d);
+            label = `${kit.name} <span class="dates-list">(${parts.join(', ')}) x ${kit.dates.length}</span>`;
+          } else {
+            label = kit.hp
+              ? `${kit.name} <span class="hp">| ${kit.hp} headphones</span>`
+              : kit.name;
+          }
           return `<div class="kit-row${isChecked?' checked':''}" data-id="${id}" data-week="${wi}" data-staff="${si}">
             <span class="dot" style="background:var(--${color})"></span>
             <div class="box${isChecked?' checked':''}"></div>
@@ -677,43 +721,6 @@ function renderKits(){
   updateKitsRing();
 }
 
-function renderBookings(){
-  const container = document.getElementById('bookingsList');
-  container.innerHTML = '';
-
-  bookings.forEach((b, i)=>{
-    const isDistributed = !!bookingsChecked[i];
-    const card = document.createElement('div');
-    card.className = 'booking-card' + (isDistributed ? ' distributed' : '');
-    card.setAttribute('data-idx', i);
-    const hpBadge = b.hp
-      ? `<div class="hp-badge"><div class="n">${b.hp}</div><div class="t">Headphones</div></div>`
-      : `<div class="hp-badge na"><div class="n">—</div><div class="t">No hp</div></div>`;
-    card.innerHTML = `
-      <div class="box${isDistributed?' checked':''}"></div>
-      <div class="booking-info">
-        <div class="booking-date">${b.date} · ${b.time}</div>
-        <div class="booking-venue">${b.session} | ${b.venue}</div>
-        <div class="booking-meta">${b.staff}</div>
-      </div>
-      ${hpBadge}
-    `;
-    container.appendChild(card);
-  });
-
-  document.querySelectorAll('.booking-card').forEach(el=>{
-    el.addEventListener('click', ()=>{
-      const idx = el.getAttribute('data-idx');
-      bookingsChecked[idx] = !bookingsChecked[idx];
-      saveBookingsState();
-      renderBookings();
-      updateBookingsRing();
-    });
-  });
-
-  updateBookingsRing();
-}
-
 document.getElementById('resetBtn').addEventListener('click', ()=>{
   checked = {};
   weeks.forEach((w, wi)=>{
@@ -721,44 +728,6 @@ document.getElementById('resetBtn').addEventListener('click', ()=>{
   });
   saveState();
   renderKits();
-});
-
-document.getElementById('resetBookingsBtn').addEventListener('click', ()=>{
-  bookingsChecked = {};
-  saveBookingsState();
-  renderBookings();
-});
-
-const tabKits = document.getElementById('tabKits');
-const tabBookings = document.getElementById('tabBookings');
-const kitsView = document.getElementById('kitsView');
-const bookingsView = document.getElementById('bookingsView');
-const ringWrap = document.getElementById('ringWrap');
-const legendRow = document.getElementById('legendRow');
-const pageTitle = document.getElementById('pageTitle');
-const pageSub = document.getElementById('pageSub');
-
-tabKits.addEventListener('click', ()=>{
-  tabKits.classList.add('active');
-  tabBookings.classList.remove('active');
-  kitsView.style.display = '';
-  bookingsView.style.display = 'none';
-  ringWrap.style.display = '';
-  legendRow.style.display = '';
-  pageTitle.textContent = 'Spring SH';
-  pageSub.textContent = "Tap a kit once it's in the bag";
-  updateKitsRing();
-});
-tabBookings.addEventListener('click', ()=>{
-  tabBookings.classList.add('active');
-  tabKits.classList.remove('active');
-  kitsView.style.display = 'none';
-  bookingsView.style.display = '';
-  ringWrap.style.display = '';
-  legendRow.style.display = 'none';
-  pageTitle.textContent = 'September Bookings';
-  pageSub.textContent = 'Tap once kits are handed out';
-  updateBookingsRing();
 });
 
 loadState();
